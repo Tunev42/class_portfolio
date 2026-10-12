@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Достижения{% endblock %}
+
+{% block body %}
+<h2>Наши достижения</h2>
+
+{% if achievements %}
+    <div class="achievements-list">
+        {% for a in achievements %}
+        <div class="achievement-card status-{{ a.status }}">
+            {% if a.image %}
+                <img src="{{ url_for('static', filename='images/' + a.image) }}" alt="{{ a.title }}">
+            {% endif %}
+            <h3>{{ a.title }}</h3>
+            <p class="date">{{ a.date.strftime('%d.%m.%Y') }}</p>
+            <p>{{ a.description }}</p>
+
+            {# Бейдж статуса #}
+            {% if a.status == 'pending' %}
+                <span class="status-badge pending">На модерации</span>
+            {% elif a.status == 'rejected' %}
+                <span class="status-badge rejected">Отклонено: {{ a.rejection_reason }}</span>
+            {% endif %}
+
+            <p class="author">Добавил: {{ a.author.name }}</p>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Пока нет достижений.</p>
+{% endif %}
+
+{% if current_user.is_authenticated %}
+    <p class="switch-form">
+        <a href="{{ url_for('add_achievement') }}">➕ Добавить своё достижение</a>
+    </p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить достижение{% endblock %}
+
+{% block body %}
+<h2>Добавить новое достижение</h2>
+
+<form method="POST" action="{{ url_for('add_achievement') }}" enctype="multipart/form-data">
+    <label for="title">Название достижения:</label>
+    <input type="text" id="title" name="title" required placeholder="Например: 1 место в олимпиаде по математике">
+
+    <label for="date">Дата:</label>
+    <input type="date" id="date" name="date" required>
+
+    <label for="description">Описание:</label>
+    <input type="text" id="description" name="description" placeholder="Краткое описание события">
+
+    <label for="image">Фотография (необязательно):</label>
+    <input type="file" id="image" name="image" accept="image/*">
+
+    <button type="submit">Сохранить достижение</button>
+</form>
+
+<p class="switch-form">
+    <a href="{{ url_for('achievements') }}">← Вернуться к списку достижений</a>
+</p>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Актуальные олимпиады{% endblock %}
+
+{% block body %}
+<h2>Актуальные олимпиады</h2>
+
+<p style="margin-bottom: 20px; color: var(--text-muted);">
+    <br><small>Данные обновляются при каждом заходе на страницу.</small>
+</p>
+
+{% if olympiads %}
+    <div class="achievements-list">
+        {% for item in olympiads %}
+        <div class="achievement-card">
+            <h3>{{ item.title }}</h3>
+            <p class="date">Источник: {{ item.source }}</p>
+
+            {% if item.link != '#' %}
+                <a href="{{ item.link }}" target="_blank" class="btn-approve" style="text-align: center; display: block; margin-top: 10px; text-decoration: none;">
+                    Перейти на сайт олимпиады →
+                </a>
+            {% else %}
+                <p style="color: var(--error-color); margin-top: 10px;">Ссылка временно недоступна</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="empty-moderation">К сожалению, сейчас не удалось загрузить список олимпиад. Проверьте подключение к интернету.</p>
+{% endif %}
+{% endblock %}

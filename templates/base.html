@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Портфолио класса{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script>
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        const currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme); // Сохраняем выбор
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Портфолио нашего класса</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Главная</a>
+            <a href="{{ url_for('achievements') }}">Достижения</a>
+            <a href="{{ url_for('gallery') }}">Фото</a>
+            <a href="{{ url_for('schedule') }}">Расписание</a>
+            <a href="{{ url_for('olympiads') }}">Олимпиады</a>
+
+            {% if current_user.is_authenticated %}
+                <span class="user-info">{{ current_user.name }}</span>
+                <a href="{{ url_for('add_achievement') }}" class="add-btn">Добавление Достижение</a>
+                <a href="{{ url_for('add_photo') }}" class="add-btn">Добавление Фото</a>
+                {% if current_user.is_teacher_or_admin() %}
+                    <a href="{{ url_for('moderation') }}" class="moderation-btn">Модерация</a>
+                {% endif %}
+
+                <a href="{{ url_for('logout') }}">Выйти</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Войти</a>
+                <a href="{{ url_for('register') }}">Регистрация</a>
+            {% endif %}
+
+            <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему">
+                🌓
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        {# Вывод всплывающих сообщений (flash) #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {# Сюда будет подставляться содержимое дочерних шаблонов #}
+        {% block body %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2026 Наш класс</p>
+    </footer>
+</body>
+</html>

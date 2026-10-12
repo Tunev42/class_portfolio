@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Модерация{% endblock %}
+
+{% block body %}
+<h2>Модерация достижений</h2>
+
+{% if achievements %}
+    <div class="achievements-list">
+        {% for a in achievements %}
+        <div class="achievement-card moderation-card">
+            {% if a.image %}
+                <img src="{{ url_for('static', filename='images/' + a.image) }}" alt="{{ a.title }}">
+            {% endif %}
+            <h3>{{ a.title }}</h3>
+            <p class="date">{{ a.date.strftime('%d.%m.%Y') }}</p>
+            <p>{{ a.description }}</p>
+            <p class="author"> Автор: <strong>{{ a.author.name }}</strong> ({{ a.author.username }})</p>
+
+            <div class="moderation-actions">
+                <a href="{{ url_for('approve', achievement_id=a.id) }}" class="btn-approve">Одобрить</a>
+
+                <button onclick="toggleRejectForm({{ a.id }})" class="btn-reject">Отклонить</button>
+
+                <div id="reject-form-{{ a.id }}" class="reject-form" style="display: none;">
+                    <form method="POST" action="{{ url_for('reject', achievement_id=a.id) }}">
+                        <input type="text" name="reason" placeholder="Причина отклонения..." required>
+                        <button type="submit" class="btn-reject">Подтвердить отклонение</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="empty-moderation">Все достижения проверены! Новых заявок нет.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleRejectForm(id) {
+        const form = document.getElementById('reject-form-' + id);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

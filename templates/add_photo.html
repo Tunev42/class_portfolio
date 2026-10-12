@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить фото{% endblock %}
+
+{% block body %}
+<h2>Добавить фотографию в галерею</h2>
+
+<form method="POST" action="{{ url_for('add_photo') }}" enctype="multipart/form-data">
+    <label for="caption">Подпись к фото:</label>
+    <input type="text" id="caption" name="caption" placeholder="Например: Наш класс на экскурсии в музее">
+
+    <label for="photo">Выберите файл:</label>
+    <input type="file" id="photo" name="photo" accept="image/*" required>
+
+    <button type="submit">Загрузить фото</button>
+</form>
+
+<p class="switch-form">
+    <a href="{{ url_for('gallery') }}">← Вернуться в галерею</a>
+</p>
+{% endblock %}

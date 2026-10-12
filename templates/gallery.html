@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Фотогалерея{% endblock %}
+
+{% block body %}
+<h2>Фотогалерея</h2>
+
+{% if photos %}
+    <div class="gallery">
+        {% for p in photos %}
+        <div class="photo-card">
+            <img src="{{ url_for('static', filename='images/' + p.filename) }}" alt="{{ p.caption }}">
+            {% if p.caption %}
+                <p>{{ p.caption }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Фото пока нет.</p>
+{% endif %}
+{% endblock %}
